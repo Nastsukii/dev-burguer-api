@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 import User from '../models/User.js';
-
+import * as Yup from 'yup';
+import bcrypt from 'bcrypt'
 /*
 store - cria dado
 index - lista todos os dados
@@ -11,7 +12,21 @@ delete - deleta dados
 
 class UserController {
   async store(request, response) {
-    const { name, email, password_hash, admin } = request.body;
+    const schema = Yup.object({
+      name: Yup.string().required(),
+      email: Yup.string().email().required(),
+      password: Yup.string().min(6).required(),
+      admin: Yup.boolean(),
+    });
+
+    try {
+      schema.validateSync(request.body, { abortEarly: false, strict: true });
+    } catch (err) {
+      console.log(err);
+      return response.status(400).json({error: err.errors})
+    }
+
+    const { name, email, password, admin } = request.body;
     const existingUser = await User.findOne({
       where: {
         email,
@@ -19,10 +34,10 @@ class UserController {
     });
 
     if (existingUser) {
-      return response
-        .status(400)
-        .json({ message: 'Esse email já está cadastrado' });
+      return response.status(400).json({ message: 'email already taken' });
     }
+
+    const password_hash = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       id: v4(),
