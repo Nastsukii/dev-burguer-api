@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import User from '../models/User.js';
 import * as Yup from 'yup';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 /*
 store - cria dado
 index - lista todos os dados
@@ -23,7 +23,7 @@ class UserController {
       schema.validateSync(request.body, { abortEarly: false, strict: true });
     } catch (err) {
       console.log(err);
-      return response.status(400).json({error: err.errors})
+      return response.status(400).json({ error: err.errors });
     }
 
     const { name, email, password, admin } = request.body;

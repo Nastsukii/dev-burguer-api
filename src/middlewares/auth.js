@@ -11,11 +11,11 @@ const authMiddleware = (request, response, next) => {
 
   try {
     jwt.verify(token, authConfig.secret, (error, decoded) => {
-      console.log(decoded);
       if (error) {
         throw Error();
       }
       request.userId = decoded.id;
+      request.userIsAdmin = decoded.admin;
     });
   } catch (__error) {
     return response.status(401).json({ error: 'Token is Valid' });
