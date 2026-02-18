@@ -91,10 +91,10 @@ class OrderController {
     return response.status(200).json({ message: 'Status update successfulle' });
   }
 
-  async index(request, response){
-    const orders = await Order.find()
-    
-        return response.status(200).json(orders)
+  async index(request, response) {
+    const orders = await Order.find();
+
+    return response.status(200).json(orders);
   }
 }
 
