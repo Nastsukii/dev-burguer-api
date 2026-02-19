@@ -2,8 +2,10 @@ import express from 'express';
 import routes from './routes.js';
 import fileRouteConfig from './config/fileRoutes.cjs';
 const app = express();
+import cors from 'cors';
 
 app.use(express.json());
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use('/product-file', fileRouteConfig);
